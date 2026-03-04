@@ -1,0 +1,119 @@
+.featured-products {
+	padding: 80px 0;
+}
+
+/* Heading Sizes */
+.size-sm {
+	font-size: 1.5rem;
+}
+.size-md {
+	font-size: 2rem;
+}
+.size-lg {
+	font-size: 2.6rem;
+}
+.size-xl {
+	font-size: 3.2rem;
+}
+
+.section-header {
+	margin-bottom: 50px;
+}
+
+/* Grid */
+.product_grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+	gap: 35px;
+}
+
+/* Card */
+.product_card {
+	background: #ffffff;
+	border-radius: 16px;
+	overflow: hidden;
+	position: relative;
+	transition: all 0.35s ease;
+	border: 1px solid #f2f2f2;
+}
+
+.product_card:hover {
+	transform: translateY(-8px);
+	box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08);
+}
+
+/* Image */
+.product-image {
+	overflow: hidden;
+}
+
+.product_card img {
+	width: 100%;
+	height: 320px;
+	object-fit: cover;
+	transition: 0.5s ease;
+}
+
+.product_card:hover img {
+	transform: scale(1.1);
+}
+
+/* Info */
+.product-info {
+	padding: 22px;
+}
+
+.product_card h3 {
+	font-size: 1.05rem;
+	font-weight: 600;
+	margin-bottom: 10px;
+	color: #111;
+}
+
+.price {
+	font-size: 1rem;
+}
+
+.old-price {
+	text-decoration: line-through;
+	color: #999;
+	margin-right: 8px;
+}
+
+.current-price {
+	font-weight: 700;
+	color: #000;
+}
+
+/* Sale Badge */
+.badge-sale {
+	position: absolute;
+	top: 15px;
+	left: 15px;
+	background: #000;
+	color: #fff;
+	padding: 6px 14px;
+	font-size: 0.75rem;
+	border-radius: 30px;
+	letter-spacing: 0.5px;
+}
+
+/* No collection */
+.no-collection {
+	text-align: center;
+	color: #888;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+	.product_card img {
+		height: 240px;
+	}
+
+	.size-xl {
+		font-size: 2.2rem;
+	}
+	.size-lg {
+		font-size: 2rem;
+	}
+}
