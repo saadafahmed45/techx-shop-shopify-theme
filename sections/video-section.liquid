@@ -1,0 +1,118 @@
+<div class="video_section">
+    <div class="container">
+
+        ```
+        <div class="video_header">
+            <h2 class="video_title">{{ section.settings.title }}</h2>
+            <p class="video_description">{{ section.settings.description }}</p>
+        </div>
+
+        <div class="video_wrapper">
+            <iframe src="{{ section.settings.video_url }}" frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen>
+            </iframe>
+        </div>
+        ```
+
+    </div>
+</div>
+
+<style>
+    .video_section {
+        padding: 70px 0;
+        text-align: center;
+        background: #f9f9f9;
+    }
+
+    .video_header {
+        max-width: 700px;
+        margin: auto;
+        margin-bottom: 40px;
+    }
+
+    .video_title {
+        font-size: 36px;
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+
+    .video_description {
+        font-size: 16px;
+        color: #666;
+    }
+
+    .video_wrapper {
+        position: relative;
+        width: 100%;
+        max-width: 900px;
+        margin: auto;
+        padding-bottom: 56.25%;
+        height: 0;
+        overflow: hidden;
+        border-radius: 12px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    }
+
+    .video_wrapper iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border-radius: 12px;
+    }
+
+    /* mobile */
+
+    @media(max-width:768px) {
+
+        .video_title {
+            font-size: 28px;
+        }
+
+        .video_description {
+            font-size: 15px;
+        }
+
+        .video_section {
+            padding: 50px 20px;
+        }
+
+    }
+</style>
+
+{% schema %}
+{
+"name": "Video Section",
+"settings": [
+
+{
+"type": "text",
+"id": "title",
+"label": "Section Title",
+"default": "Watch Our Latest Video"
+},
+
+{
+"type": "text",
+"id": "description",
+"label": "Section Description",
+"default": "Discover the latest insights and updates from our team."
+},
+
+{
+"type": "url",
+"id": "video_url",
+"label": "YouTube Embed URL"
+}
+
+],
+
+"presets": [
+{
+"name": "Video Section"
+}
+]
+}
+{% endschema %}
