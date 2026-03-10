@@ -115,6 +115,63 @@
         "collection": "premium-bluetooth-speakers",
         "products_to_show": 4
       }
+    },
+    "video_section_mjLC3J": {
+      "type": "video-section",
+      "name": "Video Section",
+      "settings": {
+        "title": "Watch Our Latest Video",
+        "description": "Discover the latest insights and updates from our team.",
+        "video_url": "https://www.youtube.com/embed/8of5w7RgcTc"
+      }
+    },
+    "faq_Ri3iQH": {
+      "type": "faq",
+      "name": "FAQ Section",
+      "settings": {}
+    },
+    "instagram_gallery_ayRb4F": {
+      "type": "instagram-Gallery",
+      "blocks": {
+        "image_MfAd8B": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/make_a_logo_for_facebook_page_name___Strong_Life_Bangla__funny_fruit_and_veg_object_video_page_make_the_fruit_are_realstick_and_middle_are_page_name_Highlight_2.jpg",
+            "link": ""
+          }
+        },
+        "image_t7aeHU": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/make_a_cover_for_facebook_page_name___Strong_Life_Bangla__funny_fruit_and_veg_object_video_page.jpg",
+            "link": ""
+          }
+        },
+        "image_qn3QzW": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/make_a_cover_for_facebook_page_name___Strong_Life_Bangla__funny_fruit_and_veg_object_video_page_1.jpg",
+            "link": ""
+          }
+        },
+        "image_HF6Jgj": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/make_a_logo_for_facebook_page_name___Strong_Life_Bangla__funny_fruit_and_veg_object_video_page_make_the_fruit_are_realstick_and_middle_are_page_name_Highlight.jpg",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "image_MfAd8B",
+        "image_t7aeHU",
+        "image_qn3QzW",
+        "image_HF6Jgj"
+      ],
+      "name": "Instagram Gallery",
+      "settings": {
+        "title": "Follow Us On Instagram"
+      }
     }
   },
   "order": [
@@ -122,6 +179,9 @@
     "main",
     "collection_list_dWT63g",
     "image_text_Vh6MCz",
-    "feature_collection_BEWqX9"
+    "feature_collection_BEWqX9",
+    "video_section_mjLC3J",
+    "faq_Ri3iQH",
+    "instagram_gallery_ayRb4F"
   ]
 }

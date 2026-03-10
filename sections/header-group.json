@@ -8,17 +8,19 @@
  * ------------------------------------------------------------
  */
 {
-  "type": "header",
-  "name": "t:general.header",
-  "sections": {
-    "header": {
-      "type": "header",
-      "settings": {
-        "menu": "main-menu-1"
-      }
-    }
-  },
-  "order": [
-    "header"
-  ]
+	"type": "header",
+	"name": "t:general.header",
+	"sections": {
+		"announcement": {
+			"type": "announcement-bar",
+			"settings": {}
+		},
+		"header": {
+			"type": "header",
+			"settings": {
+				"menu": "main-menu-1"
+			}
+		}
+	},
+	"order": ["announcement", "header"]
 }

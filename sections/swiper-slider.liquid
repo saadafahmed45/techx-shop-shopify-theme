@@ -1,0 +1,212 @@
+<div class="swiper-container-wrapper" style="padding: {{ section.settings.padding_top }}px 0;">
+    <div class="swiper my-product-slider-{{ section.id }}">
+        <div class="swiper-wrapper">
+
+            {% for block in section.blocks %}
+            {%- assign product = all_products[block.settings.product] -%}
+
+            <div class="swiper-slide" {{ block.shopify_attributes }}>
+                {% if product != blank %}
+                <img src="{{ product.featured_image | image_url: width: 1200 }}" alt="{{ product.title }}"
+                    loading="{% if forloop.first %}eager{% else %}lazy{% endif %}">
+
+                <div class="slide-overlay">
+                    <h2>{{ product.title }}</h2>
+                    <p>{{ product.price | money }}</p>
+
+                    <a href="{{ product.url }}" class="button">
+                        {{ section.settings.button_label | default: "View Product" }}
+                    </a>
+                </div>
+                {% else %}
+                {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+                <div class="slide-overlay">
+                    <h2>Example Product Title</h2>
+                    <p>$99.00</p>
+                    <a href="#" class="button">View Product</a>
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+
+        </div>
+
+        {% if section.settings.show_dots %}
+        <div class="swiper-pagination"></div>
+        {% endif %}
+
+        {% if section.settings.show_arrows %}
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-button-next"></div>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+    .swiper-container-wrapper {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .my-product-slider- {
+            {
+            section.id
+        }
+    }
+
+        {
+        width: 100%;
+        height: 500px;
+        background: #eee;
+    }
+
+    .swiper-slide img {
+        width: 100%;
+        height: 600px;
+        object-fit: cover;
+        display: block;
+    }
+
+    .slide-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        background: rgba(0, 0, 0, 0.3);
+        /* Slightly darker for product readability */
+        color: #ffffff;
+        padding: 20px;
+        z-index: 2;
+    }
+
+    .slide-overlay h2 {
+        font-size: 2.5rem;
+        margin: 0 0 10px;
+        font-weight: 700;
+        color: #fff;
+    }
+
+    .slide-overlay p {
+        font-size: 1.5rem;
+        margin-bottom: 20px;
+    }
+
+    .slide-overlay .button {
+        display: inline-block;
+        padding: 12px 35px;
+        background-color: #fff;
+        color: #000;
+        text-decoration: none;
+        font-weight: bold;
+        border-radius: 4px;
+        transition: 0.3s;
+    }
+
+    .slide-overlay .button:hover {
+        background-color: #000;
+        color: #fff;
+    }
+
+    .swiper-button-next,
+    .swiper-button-prev {
+        color: #fff !important;
+    }
+
+    .swiper-pagination-bullet-active {
+        background: #fff !important;
+    }
+
+    @media (max-width: 768px) {
+        .my-product-slider- {
+                {
+                section.id
+            }
+        }
+
+            {
+            height: 400px;
+        }
+
+        .slide-overlay h2 {
+            font-size: 1.8rem;
+        }
+    }
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script>
+    function initProductSlider() {
+        new Swiper('.my-product-slider-{{ section.id }}', {
+            loop: true,
+            pagination: { el: '.swiper-pagination', clickable: true },
+            navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
+            autoplay: { delay: 5000 }
+        });
+    }
+    document.addEventListener('DOMContentLoaded', initProductSlider);
+    document.addEventListener('shopify:section:load', initProductSlider);
+</script>
+
+{% schema %}
+{
+"name": "Product Hero Slider",
+"settings": [
+{
+"type": "range",
+"id": "padding_top",
+"label": "Top Padding",
+"min": 0,
+"max": 100,
+"step": 10,
+"default": 0
+},
+{
+"type": "text",
+"id": "button_label",
+"label": "Button Label",
+"default": "Shop Now"
+},
+{
+"type": "checkbox",
+"id": "show_arrows",
+"label": "Show Navigation Arrows",
+"default": true
+},
+{
+"type": "checkbox",
+"id": "show_dots",
+"label": "Show Pagination Dots",
+"default": true
+}
+],
+"blocks": [
+{
+"type": "product_slide",
+"name": "Product Slide",
+"settings": [
+{
+"type": "product",
+"id": "product",
+"label": "Select Product"
+}
+]
+}
+],
+"presets": [
+{
+"name": "Product Hero Slider",
+"category": "Slider",
+"blocks": [
+{ "type": "product_slide" },
+{ "type": "product_slide" }
+]
+}
+]
+}
+{% endschema %}

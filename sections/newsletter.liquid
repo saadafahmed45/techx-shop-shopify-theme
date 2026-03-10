@@ -1,13 +1,170 @@
-<div>
-    <div class="newsletter-section">
-        <div class="container">
-            <h2>Subscribe to our Newsletter</h2>
-            <p>Get the latest updates and offers.</p>
+<div class="newsletter-wrapper section-{{ section.id }}">
+    <div class="newsletter-container">
+        <div class="newsletter-content">
+            <span class="newsletter-label">{{ section.settings.sublabel | default: "JOIN THE COMMUNITY" }}</span>
+            <h2>{{ section.settings.heading | default: "Subscribe to our Newsletter" }}</h2>
+            <p>{{ section.settings.subheading | default: "Get the latest updates, early access to new drops, and
+                exclusive offers." }}</p>
 
-            <form action="/subscribe" method="post" class="newsletter-form">
-                <input type="email" name="email" placeholder="Enter your email" required>
-                <button type="submit">Subscribe</button>
-            </form>
+            {% form 'customer', class: 'newsletter-form' %}
+            <input type="hidden" name="contact[tags]" value="newsletter">
+            <div class="input-group">
+                <input type="email" name="contact[email]" id="Email-{{ section.id }}" class="newsletter-input"
+                    placeholder="Enter your email" required>
+                <button type="submit" class="newsletter-submit" name="commit">
+                    {{ section.settings.button_text | default: "Subscribe" }}
+                </button>
+            </div>
+            {%- if form.posted_successfully? -%}
+            <p class="form-success">Thanks for subscribing!</p>
+            {%- endif -%}
+            {% endform %}
         </div>
     </div>
 </div>
+
+{% style %}
+.newsletter-wrapper {
+background-color: {{ section.settings.bg_color | default: '#f4f4f4' }};
+padding: 80px 20px;
+display: flex;
+justify-content: center;
+align-items: center;
+}
+
+.newsletter-container {
+max-width: 600px;
+width: 100%;
+text-align: center;
+}
+
+.newsletter-label {
+display: block;
+font-size: 12px;
+letter-spacing: 2px;
+font-weight: 700;
+color: #666;
+margin-bottom: 10px;
+}
+
+.newsletter-content h2 {
+font-size: 2.5rem;
+margin: 0 0 15px;
+font-weight: 800;
+color: #1a1a1a;
+line-height: 1.2;
+}
+
+.newsletter-content p {
+font-size: 1.1rem;
+color: #444;
+margin-bottom: 35px;
+line-height: 1.6;
+}
+
+/* Form Layout */
+.newsletter-form {
+width: 100%;
+}
+
+.input-group {
+display: flex;
+gap: 0;
+background: #fff;
+padding: 5px;
+border-radius: 50px;
+border: 1px solid #ddd;
+transition: box-shadow 0.3s ease;
+}
+
+.input-group:focus-within {
+box-shadow: 0 0 0 3px rgba(0,0,0,0.05);
+border-color: #000;
+}
+
+.newsletter-input {
+flex: 1;
+border: none;
+background: transparent;
+padding: 15px 25px;
+font-size: 1rem;
+outline: none;
+border-radius: 50px;
+}
+
+.newsletter-submit {
+background-color: #000;
+color: #fff;
+border: none;
+padding: 0 35px;
+font-weight: 600;
+border-radius: 50px;
+cursor: pointer;
+transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.newsletter-submit:hover {
+background-color: #333;
+}
+
+.newsletter-submit:active {
+transform: scale(0.98);
+}
+
+.form-success {
+color: #2e7d32;
+margin-top: 15px;
+font-weight: 600;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+.newsletter-content h2 { font-size: 1.8rem; }
+.input-group {
+flex-direction: column;
+background: transparent;
+border: none;
+padding: 0;
+gap: 10px;
+}
+.newsletter-input {
+background: #fff;
+border: 1px solid #ddd;
+}
+.newsletter-submit {
+padding: 15px;
+}
+}
+{% endstyle %}
+
+{% schema %}
+{
+"name": "Newsletter Section",
+"settings": [
+{
+"type": "color",
+"id": "bg_color",
+"label": "Background Color",
+"default": "#f4f4f4"
+},
+{
+"type": "text",
+"id": "heading",
+"label": "Heading",
+"default": "Subscribe to our Newsletter"
+},
+{
+"type": "text",
+"id": "button_text",
+"label": "Button Text",
+"default": "Subscribe"
+}
+],
+"presets": [
+{
+"name": "Newsletter Section",
+"category": "Custom-Sections"
+}
+]
+}
+{% endschema %}
