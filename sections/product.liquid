@@ -4,118 +4,670 @@ media, content, and add-to-cart form.
 
 https://shopify.dev/docs/storefronts/themes/architecture/templates/product
 {% endcomment %}
-<div class="product_section">
+
+<div class="product-section py-5">
   <div class="container">
-    <div class="wrapper">
+    <div class="product-wrapper">
 
-      <div class="product_images">
-        {% for image in product.images %}
-        {% render 'image', class: 'product-image', image: image %}
-        {% endfor %}
-      </div>
-      <div class="content">
-
-        <div class="product-info">
-          <h1>{{ product.title }}</h1>
-          <p class="">{{ product.price | money }}</p>
-          <p>{{ product.description }}</p>
+      <!-- Product Images Gallery -->
+      <div class="product-gallery">
+        {% if product.images.size > 0 %}
+        <div class="main-image">
+          {% for image in product.images limit: 1 %}
+          {% render 'image',
+          class: 'main-product-image',
+          image: image,
+          loading: 'eager'
+          %}
+          {% endfor %}
         </div>
 
-        <div class="product-form">
-          {% form 'product', product %}
+        {% if product.images.size > 1 %}
+        <div class="thumbnail-grid">
+          {% for image in product.images %}
+          <div class="thumbnail-item">
+            {% render 'image',
+            class: 'thumbnail-image',
+            image: image,
+            loading: 'lazy'
+            %}
+          </div>
+          {% endfor %}
+        </div>
+        {% endif %}
+        {% else %}
+        <div class="no-image-placeholder">
+          {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+        </div>
+        {% endif %}
+      </div>
+
+      <!-- Product Content -->
+      <div class="product-content">
+
+        <!-- Product Info -->
+        <div class="product-info">
+          {% if product.vendor %}
+          <div class="product-vendor">{{ product.vendor }}</div>
+          {% endif %}
+
+          <h1 class="product-title">{{ product.title }}</h1>
+
+          <div class="product-price">
+            <span class="price">{{ product.price | money }}</span>
+            {% if product.compare_at_price > product.price %}
+            <span class="compare-at-price">{{ product.compare_at_price | money }}</span>
+            <span class="save-badge">Save {{ product.compare_at_price | minus: product.price | money }}</span>
+            {% endif %}
+          </div>
+
+          {% if product.available == false %}
+          <div class="sold-out-badge">Sold Out</div>
+          {% endif %}
+
+          <div class="product-description">
+            {{ product.description }}
+          </div>
+        </div>
+
+        <!-- Product Form -->
+        <div class="product-form-wrapper">
+          {% form 'product', product, id: 'product-form', class: 'product-form' %}
           {% assign current_variant = product.selected_or_first_available_variant %}
 
+          <!-- Variant Selector (if product has variants) -->
+          {% if product.variants.size > 1 %}
+          <div class="variant-selector">
+            <label for="product-variants">Size / Option</label>
+            <select name="id" id="product-variants" class="variant-select">
+              {% for variant in product.variants %}
+              <option value="{{ variant.id }}" {% if variant==current_variant %}selected{% endif %} {% unless
+                variant.available %}disabled{% endunless %}>
+                {{ variant.title }} - {{ variant.price | money }}
+                {% unless variant.available %} (Sold Out){% endunless %}
+              </option>
+              {% endfor %}
+            </select>
+          </div>
+          {% else %}
+          <input type="hidden" name="id" value="{{ current_variant.id }}">
+          {% endif %}
 
+          <!-- Quantity Selector -->
+          <div class="quantity-selector">
+            <label for="quantity">Quantity</label>
+            <div class="quantity-controls">
+              <button type="button" class="quantity-btn minus" onclick="decrementQuantity()">−</button>
+              <input type="number" id="quantity" name="quantity" value="1" min="1" class="quantity-input" required>
+              <button type="button" class="quantity-btn plus" onclick="incrementQuantity()">+</button>
+            </div>
+          </div>
 
-          <input type="number" name="quantity" min="1" value="1" required>
+          <!-- Form Actions -->
+          <div class="form-actions">
+            <button type="submit" name="add" class="btn btn-primary add-to-cart-btn" {% unless current_variant.available
+              %}disabled{% endunless %}>
+              <span class="btn-text">
+                {% if current_variant.available %}
+                Add to Cart
+                {% else %}
+                Sold Out
+                {% endif %}
+              </span>
+            </button>
 
-
-
-          <div>
-            <input type="submit" value="Add to cart">
-            {{ form | payment_button }}
+            <div class="dynamic-checkout">
+              {{ form | payment_button }}
+            </div>
           </div>
           {% endform %}
         </div>
+
+        <!-- Additional Info (optional) -->
+        <div class="product-meta">
+          {% if product.tags.size > 0 %}
+          <div class="product-tags">
+            <span class="meta-label">Tags:</span>
+            {% for tag in product.tags %}
+            <span class="tag">{{ tag }}</span>
+            {% endfor %}
+          </div>
+          {% endif %}
+
+          <div class="product-type">
+            <span class="meta-label">Category:</span>
+            <span>{{ product.type }}</span>
+          </div>
+        </div>
+
       </div>
     </div>
-
-    <style>
-      .product-image {
-        width: 700px;
-        height: auto;
-      }
-
-      .wrapper {
-        display: flex;
-        gap: 40px;
-        padding: 50px 0;
-      }
-
-      .content {
-        width: 60%;
-        display: flex;
-        flex-direction: column;
-        gap: 30px;
-      }
-
-      .product-info h1 {
-        font-size: 2.5em;
-        margin: 0;
-      }
-
-      .product-form select,
-      .product-form input[type="text"] {
-        padding: 10px;
-        margin-bottom: 20px;
-        width: 100%;
-      }
-
-      .product-form input[type="submit"] {
-        padding: 15px;
-        background-color: #333;
-        color: #fff;
-        border: none;
-        cursor: pointer;
-      }
-
-      @media screen and (max-width: 768px) {
-        .wrapper {
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-          gap: 20px;
-        }
-
-        .product_images,
-        .content {
-          width: 100%;
-        }
-      }
-
-      @media screen and (max-width: 480px) {
-        .wrapper {
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-          gap: 20px;
-        }
-
-        .product-image {
-          width: 300px;
-          height: auto;
-        }
-
-      }
-    </style>
   </div>
 </div>
+
+<style>
+  .product-section {
+    background-color: #ffffff;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+  }
+
+  .container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  .product-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 50px;
+    padding: 40px 0;
+  }
+
+  /* Gallery Styles */
+  .product-gallery {
+    position: sticky;
+    top: 20px;
+    align-self: start;
+  }
+
+  .main-image {
+    background-color: #f8f8f8;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    aspect-ratio: 1/1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .main-product-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+
+  .main-product-image:hover {
+    transform: scale(1.02);
+  }
+
+  .thumbnail-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+  }
+
+  .thumbnail-item {
+    background-color: #f8f8f8;
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+    aspect-ratio: 1/1;
+    border: 2px solid transparent;
+    transition: border-color 0.3s ease;
+  }
+
+  .thumbnail-item:hover {
+    border-color: #333;
+  }
+
+  .thumbnail-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .no-image-placeholder {
+    background-color: #f8f8f8;
+    border-radius: 12px;
+    aspect-ratio: 1/1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .placeholder-svg {
+    width: 100%;
+    height: 100%;
+    fill: #ddd;
+  }
+
+  /* Content Styles */
+  .product-content {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+  }
+
+  .product-info {
+    border-bottom: 1px solid #eaeaea;
+    padding-bottom: 25px;
+  }
+
+  .product-vendor {
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #666;
+    margin-bottom: 10px;
+  }
+
+  .product-title {
+    font-size: 2.5rem;
+    font-weight: 600;
+    margin: 0 0 15px 0;
+    line-height: 1.2;
+    color: #111;
+  }
+
+  .product-price {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+
+  .price {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #111;
+  }
+
+  .compare-at-price {
+    font-size: 1.3rem;
+    color: #999;
+    text-decoration: line-through;
+  }
+
+  .save-badge {
+    background-color: #e44d2e;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+
+  .sold-out-badge {
+    background-color: #dc3545;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 4px;
+    display: inline-block;
+    margin-bottom: 20px;
+    font-weight: 600;
+  }
+
+  .product-description {
+    color: #444;
+    line-height: 1.6;
+    font-size: 1rem;
+  }
+
+  .product-description p {
+    margin: 0 0 15px 0;
+  }
+
+  /* Form Styles */
+  .product-form-wrapper {
+    background-color: #f9f9f9;
+    padding: 25px;
+    border-radius: 12px;
+  }
+
+  .product-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .variant-selector label,
+  .quantity-selector label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #333;
+    font-size: 0.95rem;
+  }
+
+  .variant-select {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    background-color: white;
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+  }
+
+  .variant-select:hover,
+  .variant-select:focus {
+    border-color: #333;
+    outline: none;
+  }
+
+  .variant-select:disabled {
+    background-color: #f5f5f5;
+    cursor: not-allowed;
+  }
+
+  /* Quantity Controls */
+  .quantity-controls {
+    display: flex;
+    align-items: center;
+    max-width: 150px;
+  }
+
+  .quantity-btn {
+    width: 45px;
+    height: 45px;
+    background-color: white;
+    border: 1px solid #ddd;
+    font-size: 1.3rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+  }
+
+  .quantity-btn:hover:not(:disabled) {
+    background-color: #f0f0f0;
+    border-color: #999;
+  }
+
+  .quantity-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .quantity-btn.minus {
+    border-radius: 8px 0 0 8px;
+  }
+
+  .quantity-btn.plus {
+    border-radius: 0 8px 8px 0;
+  }
+
+  .quantity-input {
+    width: 60px;
+    height: 45px;
+    border: 1px solid #ddd;
+    border-left: none;
+    border-right: none;
+    text-align: center;
+    font-size: 1rem;
+    -moz-appearance: textfield;
+  }
+
+  .quantity-input::-webkit-outer-spin-button,
+  .quantity-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  .quantity-input:focus {
+    outline: none;
+    border-color: #333;
+  }
+
+  /* Form Actions */
+  .form-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 10px;
+  }
+
+  .btn {
+    padding: 16px 30px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+  }
+
+  .btn-primary {
+    background-color: #111;
+    color: white;
+    width: 100%;
+  }
+
+  .btn-primary:hover:not(:disabled) {
+    background-color: #333;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  .btn-primary:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+
+  .dynamic-checkout {
+    width: 100%;
+  }
+
+  .dynamic-checkout .shopify-payment-button {
+    margin-top: 0;
+  }
+
+  .dynamic-checkout .shopify-payment-button__button {
+    border-radius: 8px !important;
+    min-height: 48px;
+  }
+
+  /* Product Meta */
+  .product-meta {
+    border-top: 1px solid #eaeaea;
+    padding-top: 25px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    font-size: 0.9rem;
+    color: #666;
+  }
+
+  .meta-label {
+    font-weight: 600;
+    color: #333;
+    margin-right: 5px;
+  }
+
+  .product-tags {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .tag {
+    background-color: #f0f0f0;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+  }
+
+  /* Responsive Styles */
+  @media screen and (max-width: 1024px) {
+    .product-wrapper {
+      gap: 40px;
+    }
+
+    .product-title {
+      font-size: 2rem;
+    }
+  }
+
+  @media screen and (max-width: 768px) {
+    .product-wrapper {
+      grid-template-columns: 1fr;
+      gap: 30px;
+    }
+
+    .product-gallery {
+      position: static;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .thumbnail-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    .product-title {
+      font-size: 1.8rem;
+    }
+
+    .price {
+      font-size: 1.6rem;
+    }
+
+    .container {
+      padding: 0 15px;
+    }
+  }
+
+  @media screen and (max-width: 480px) {
+    .product-wrapper {
+      padding: 20px 0;
+    }
+
+    .thumbnail-grid {
+      gap: 10px;
+    }
+
+    .product-title {
+      font-size: 1.5rem;
+    }
+
+    .price {
+      font-size: 1.4rem;
+    }
+
+    .compare-at-price {
+      font-size: 1.1rem;
+    }
+
+    .product-form-wrapper {
+      padding: 20px;
+    }
+
+    .form-actions {
+      gap: 12px;
+    }
+
+    .btn {
+      padding: 14px 25px;
+    }
+
+    .quantity-controls {
+      max-width: 130px;
+    }
+
+    .quantity-btn {
+      width: 40px;
+      height: 40px;
+    }
+
+    .quantity-input {
+      width: 50px;
+      height: 40px;
+    }
+  }
+
+  /* Animation */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .product-section {
+    animation: fadeIn 0.5s ease-out;
+  }
+</style>
+
+<script>
+  function incrementQuantity() {
+    const input = document.getElementById('quantity');
+    input.value = parseInt(input.value) + 1;
+  }
+
+  function decrementQuantity() {
+    const input = document.getElementById('quantity');
+    if (parseInt(input.value) > 1) {
+      input.value = parseInt(input.value) - 1;
+    }
+  }
+
+  // Thumbnail click functionality
+  document.addEventListener('DOMContentLoaded', function () {
+    const thumbnails = document.querySelectorAll('.thumbnail-item');
+    const mainImage = document.querySelector('.main-product-image');
+
+    if (thumbnails.length && mainImage) {
+      thumbnails.forEach((thumbnail, index) => {
+        thumbnail.addEventListener('click', function () {
+          const thumbnailImg = this.querySelector('.thumbnail-image');
+          if (thumbnailImg && mainImage) {
+            mainImage.src = thumbnailImg.src;
+            mainImage.alt = thumbnailImg.alt;
+          }
+        });
+      });
+    }
+  });
+</script>
+
 {% schema %}
 {
-"name": "t:general.product",
-"settings": [],
+"name": "Product Section",
+"settings": [
+{
+"type": "header",
+"content": "Layout Settings"
+},
+{
+"type": "checkbox",
+"id": "show_vendor",
+"label": "Show vendor",
+"default": true
+},
+{
+"type": "checkbox",
+"id": "show_tags",
+"label": "Show tags",
+"default": true
+},
+{
+"type": "checkbox",
+"id": "show_type",
+"label": "Show product type",
+"default": true
+}
+],
 "disabled_on": {
 "groups": ["header", "footer"]
+},
+"presets": [
+{
+"name": "Default Product Section",
+"category": "Product"
 }
+]
 }
 {% endschema %}
