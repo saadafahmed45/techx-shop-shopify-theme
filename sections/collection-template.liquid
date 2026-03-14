@@ -1,5 +1,6 @@
 <div class="collection_page">
     <div class="container">
+
         <div class="collection_header">
             <h1 class="collection-title">{{ collection.title }}</h1>
             {% comment %} <p class="collection-description">{{ collection.description }}</p> {% endcomment %}
@@ -8,164 +9,143 @@
         <div class="product-grid">
             {% for product in collection.products %}
             <div class="product-card">
+
                 <a href="{{ product.url }}" class="product-image">
                     <img src="{{ product.featured_image | img_url: '500x' }}" alt="{{ product.title }}">
                 </a>
+
                 <div class="product-info">
                     <h3 class="product-title">
                         <a href="{{ product.url }}">{{ product.title }}</a>
                     </h3>
-                    <p class="product-price">{{ product.price | money }}</p>
-                    <a href="{{ product.url }}" class="view-btn">View Product</a>
+
+                    <p class="product-price">
+                        {{ product.price | money }}
+                    </p>
+
+                    <a href="{{ product.url }}" class="view-btn">
+                        View Product
+                    </a>
                 </div>
+
             </div>
             {% endfor %}
         </div>
+
     </div>
 </div>
 
+
 <style>
-    /* Main container styling */
     .collection_page {
-        padding: 60px 20px;
-        background: #fafafa;
-        font-family: 'Helvetica Neue', sans-serif;
+        padding: 60px 0;
+        background: #f9f9f9;
     }
 
-    /* Section title styling */
-    .section-title {
-        text-align: center;
-        font-size: 24px;
-        color: #333;
-        margin-bottom: 15px;
-        font-weight: 600;
-    }
-
-    /* Collection header */
     .collection_header {
         text-align: center;
         margin-bottom: 50px;
     }
 
     .collection-title {
-        font-size: 40px;
+        font-size: 38px;
         font-weight: 700;
         margin-bottom: 10px;
-        color: #222;
     }
 
-    /* Product grid styling */
+    .collection-description {
+        font-size: 16px;
+        color: #666;
+        max-width: 600px;
+        margin: auto;
+    }
+
     .product-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
         gap: 30px;
     }
 
-    /* Product card styling */
     .product-card {
         background: #fff;
-        border-radius: 12px;
+        border-radius: 10px;
         overflow: hidden;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.07);
-        transition: transform 0.3s, box-shadow 0.3s;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+        transition: 0.3s;
     }
 
-    /* Hover effects for product card */
     .product-card:hover {
         transform: translateY(-8px);
-        box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
     }
 
-    /* Product image */
     .product-image img {
         width: 100%;
         height: 280px;
         object-fit: cover;
-        transition: filter 0.3s, transform 0.3s;
     }
 
-    /* Image hover effect */
-    .product-image img:hover {
-        filter: brightness(90%);
-        transform: scale(1.02);
-    }
-
-    /* Product info section */
     .product-info {
         padding: 20px;
         text-align: center;
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
     }
 
-    /* Product title styling */
     .product-title {
         font-size: 18px;
-        font-weight: 600;
-        margin-bottom: 8px;
-        color: #111;
+        margin-bottom: 10px;
     }
 
     .product-title a {
         text-decoration: none;
-        color: inherit;
-        transition: color 0.3s;
+        color: #111;
     }
 
-    /* Hover effect on product title link */
-    .product-title a:hover {
-        color: #e63946;
-    }
-
-    /* Product price styling */
     .product-price {
-        font-size: 16px;
+        font-size: 18px;
         font-weight: 600;
         color: #e63946;
         margin-bottom: 15px;
     }
 
-    /* View button styling */
     .view-btn {
         display: inline-block;
         padding: 10px 20px;
         background: #111;
         color: #fff;
         text-decoration: none;
-        border-radius: 6px;
+        border-radius: 5px;
         font-size: 14px;
-        transition: background 0.3s, transform 0.3s;
-        align-self: center;
-        width: fit-content;
+        transition: 0.3s;
     }
 
-    /* Hover effect on view button */
     .view-btn:hover {
         background: #e63946;
-        transform: scale(1.05);
     }
 
-    /* Responsive adjustments */
-    @media (max-width: 768px) {
+    @media (max-width:768px) {
+
         .collection-title {
-            font-size: 32px;
+            font-size: 28px;
         }
 
         .product-image img {
             height: 220px;
         }
 
-        .section-title {
-            font-size: 20px;
-        }
-
-        .view-btn {
-            padding: 8px 16px;
-            font-size: 13px;
-        }
     }
 </style>
+
+{% comment %} {% 'releted-products' %} {% endcomment %}
+
+{% schema %}
+{
+"name": "collection",
+"settings": [],
+"presets": [
+{"name": "collection",
+"category": "Products sections",
+
+"settings": {}}
+]
+}
+{% endschema %}
