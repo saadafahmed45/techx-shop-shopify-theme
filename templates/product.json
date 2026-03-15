@@ -12,9 +12,15 @@
     "main": {
       "type": "product",
       "settings": {}
+    },
+    "releted_products_wrxzAA": {
+      "type": "releted-products",
+      "name": "Related Products",
+      "settings": {}
     }
   },
   "order": [
-    "main"
+    "main",
+    "releted_products_wrxzAA"
   ]
 }
