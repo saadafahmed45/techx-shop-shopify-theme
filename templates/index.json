@@ -56,6 +56,50 @@
         "button_link": "shopify://collections/all"
       }
     },
+    "brand_icons_xbCBfJ": {
+      "type": "brand-icons",
+      "blocks": {
+        "image_GcD9MY": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/Vector_21851581-eee4-479e-a84c-fd3949530220.png"
+          }
+        },
+        "image_4QEmQr": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/Vector_2.png"
+          }
+        },
+        "image_3mD8nW": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/Vector_1.png"
+          }
+        },
+        "image_DL9NCr": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/gucci-logo-1_1.png"
+          }
+        },
+        "image_KHeqYe": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/Vector_3.png"
+          }
+        }
+      },
+      "block_order": [
+        "image_GcD9MY",
+        "image_4QEmQr",
+        "image_3mD8nW",
+        "image_DL9NCr",
+        "image_KHeqYe"
+      ],
+      "name": "Brand Icons",
+      "settings": {}
+    },
     "collection_list_dWT63g": {
       "type": "collection-list",
       "blocks": {
@@ -91,6 +135,42 @@
         "Collections_to_show": 3
       }
     },
+    "feature_collection_BEWqX9": {
+      "type": "feature-collection",
+      "name": "Featured Products",
+      "settings": {
+        "heading": "{{ section.settings.collection.title }}",
+        "heading_size": "md",
+        "heading_align": "center",
+        "products_align": "center",
+        "collection": "premium-bluetooth-speakers",
+        "products_to_show": 4
+      }
+    },
+    "feature_collection_qPYxgA": {
+      "type": "feature-collection",
+      "name": "Featured Products",
+      "settings": {
+        "heading": "{{ section.settings.collection.title }}",
+        "heading_size": "md",
+        "heading_align": "center",
+        "products_align": "center",
+        "collection": "premium-gaming-headphones",
+        "products_to_show": 4
+      }
+    },
+    "feature_collection_7eCcdz": {
+      "type": "feature-collection",
+      "name": "Featured Products",
+      "settings": {
+        "heading": "{{ section.settings.collection.title }}",
+        "heading_size": "md",
+        "heading_align": "center",
+        "products_align": "center",
+        "collection": "computer-accessories",
+        "products_to_show": 3
+      }
+    },
     "image_text_Vh6MCz": {
       "type": "image-text",
       "name": "Image with Text",
@@ -102,27 +182,6 @@
         "button_link": "shopify://collections/all",
         "reverse": false,
         "bg_color": "#f9f9f9"
-      }
-    },
-    "feature_collection_BEWqX9": {
-      "type": "feature-collection",
-      "name": "Featured Products",
-      "settings": {
-        "heading": "Featured Products",
-        "heading_size": "lg",
-        "heading_align": "center",
-        "products_align": "center",
-        "collection": "premium-bluetooth-speakers",
-        "products_to_show": 4
-      }
-    },
-    "video_section_mjLC3J": {
-      "type": "video-section",
-      "name": "Video Section",
-      "settings": {
-        "title": "Watch Our Latest Video",
-        "description": "Discover the latest insights and updates from our team.",
-        "video_url": "https://www.youtube.com/embed/8of5w7RgcTc"
       }
     },
     "faq_Ri3iQH": {
@@ -177,10 +236,12 @@
   "order": [
     "image_slider_RwH3XV",
     "main",
+    "brand_icons_xbCBfJ",
     "collection_list_dWT63g",
-    "image_text_Vh6MCz",
     "feature_collection_BEWqX9",
-    "video_section_mjLC3J",
+    "feature_collection_qPYxgA",
+    "feature_collection_7eCcdz",
+    "image_text_Vh6MCz",
     "faq_Ri3iQH",
     "instagram_gallery_ayRb4F"
   ]
